@@ -1,0 +1,18 @@
+﻿{
+  "defaultAssembly": "TaskApp.Infrastructure",
+  "modules": [
+    {
+      "type": "TaskApp.Infrastructure.Modules.WebApiModule",
+      "properties": {
+      }
+    },
+    {
+      "type": "TaskApp.Infrastructure.Modules.ApplicationModule",
+      "properties": {
+      }
+    },
+    {
+      "type": "TaskApp.Infrastructure.InMemoryDataAccess.Module"
+    }
+  ]
+}
