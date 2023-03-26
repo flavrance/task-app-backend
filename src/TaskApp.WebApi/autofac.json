@@ -10,9 +10,6 @@
       "type": "TaskApp.Infrastructure.Modules.ApplicationModule",
       "properties": {
       }
-    },
-    {
-      "type": "TaskApp.Infrastructure.InMemoryDataAccess.Module"
     }
   ]
 }

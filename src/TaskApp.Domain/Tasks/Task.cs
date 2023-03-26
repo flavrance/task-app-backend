@@ -7,7 +7,7 @@
 
     public sealed class Task : IEntity, IAggregateRoot
     {
-        public Guid Id { get; private set; }
+        public Guid Id { get; private set; }        
         public Description Description { get; private set; }
         public Date Date { get; private set; }
         public TaskStatusEnum Status { get; private set; }                
