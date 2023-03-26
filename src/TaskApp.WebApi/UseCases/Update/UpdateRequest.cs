@@ -1,9 +1,9 @@
-﻿using System;
-
-namespace TaskApp.WebApi.UseCases.Register
+﻿namespace TaskApp.WebApi.UseCases.Update
 {
-    public sealed class RegisterRequest
+    using System;
+    public sealed class UpdateRequest
     {
+        public Guid TaskId { get; set; }
         public string Description { get; set; }
         public DateTime Date { get; set; }
         public int Status { get; set; }

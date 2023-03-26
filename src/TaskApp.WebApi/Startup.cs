@@ -106,7 +106,7 @@ namespace TaskApp.WebApi
             app.UseSwagger()
                .UseSwaggerUI(c =>
                {
-                   c.SwaggerEndpoint("/swagger/v1/swagger.json", "Fluxo de Caixa API V1");
+                   c.SwaggerEndpoint("/swagger/v1/swagger.json", "Tasks API V1");
                });
         }
     }

@@ -10,10 +10,10 @@
     [Route("api/[controller]")]
     public sealed class ReportController : Controller
     {
-        private readonly ITasksQueries TasksQueries;
+        private readonly ITaskQueries TasksQueries;
 
         public ReportController(
-            ITasksQueries TasksQueries)
+            ITaskQueries TasksQueries)
         {
             this.TasksQueries = TasksQueries;
         }
@@ -26,7 +26,7 @@
         {
             var cashFlow = await TasksQueries.GetCashFlow(cashFlowId);
 
-            List<EntryModel> entries = new List<EntryModel>();
+            List<TaskCollectionModel> entries = new List<TaskCollectionModel>();
 
             foreach (var item in cashFlow.Report)
             {

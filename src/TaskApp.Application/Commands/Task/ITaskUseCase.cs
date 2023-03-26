@@ -8,6 +8,7 @@
 
     public interface ITaskUseCase
     {
+        Task<TaskResult> Execute(Guid taskId);
         Task<TaskResult> Execute(Guid taskId, Description description, Date date, TaskStatusEnum status);
     }
 }

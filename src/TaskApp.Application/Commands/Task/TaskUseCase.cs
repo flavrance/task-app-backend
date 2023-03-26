@@ -1,6 +1,7 @@
 ﻿namespace TaskApp.Application.Commands.Task
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using TaskApp.Application.Repositories;
     using TaskApp.Application.Results;
@@ -9,35 +10,37 @@
 
     public sealed class TaskUseCase : ITaskUseCase
     {
-        private readonly ICashFlowReadOnlyRepository cashFlowReadOnlyRepository;
-        private readonly ICashFlowWriteOnlyRepository cashFlowWriteOnlyRepository;
+        private readonly ITaskReadOnlyRepository taskReadOnlyRepository;
+        private readonly ITaskWriteOnlyRepository taskWriteOnlyRepository;
 
         public TaskUseCase(
-            ICashFlowReadOnlyRepository cashFlowReadOnlyRepository,
-            ICashFlowWriteOnlyRepository cashFlowWriteOnlyRepository)
+            ITaskReadOnlyRepository taskReadOnlyRepository,
+            ITaskWriteOnlyRepository taskWriteOnlyRepository)
         {
-            this.cashFlowReadOnlyRepository = cashFlowReadOnlyRepository;
-            this.cashFlowWriteOnlyRepository = cashFlowWriteOnlyRepository;
+            this.taskReadOnlyRepository = taskReadOnlyRepository;
+            this.taskWriteOnlyRepository = taskWriteOnlyRepository;
         }
 
 
-        public async Task<TaskResult> Execute(Guid taskId, Description description, Date date, TaskStatusEnum status)
-        {
-            CashFlow cashFlow = await cashFlowReadOnlyRepository.Get(cashFlowId);
-            if (cashFlow == null)
-                throw new CashFlowNotFoundException($"The cashFlow {cashFlowId} does not exists.");
+        public async Task<TaskResult> Execute(Guid taskId)
+        {            
+            Domain.Tasks.Task task = await taskReadOnlyRepository.Get(taskId);
+            if (task == null)
+                throw new TaskNotFoundException($"The task {taskId} does not exists.");
 
-            cashFlow.Credit(amount);
-            Credit credit = (Credit)cashFlow.GetLastEntry();
-
-            await cashFlowWriteOnlyRepository.Update(
-                cashFlow,
-                credit);
-
-            TaskResult result = new CreditResult(
-                credit,
-                cashFlow.GetCurrentBalance());
+            await taskWriteOnlyRepository.Delete(task);
+            TaskResult result = new TaskResult(task);
             return result;
         }
+        public async Task<TaskResult> Execute(Guid taskId, Description description, Date date, TaskStatusEnum status)
+        {
+            Domain.Tasks.Task task = await taskReadOnlyRepository.Get(taskId);
+            if (task == null)
+                throw new TaskNotFoundException($"The task {taskId} does not exists.");
+
+            await taskWriteOnlyRepository.Update(task);
+            TaskResult result = new TaskResult(task);
+            return result;
+        }        
     }
 }

@@ -4,6 +4,6 @@
 
     internal interface IEntity
     {
-        Guid Id { get; }
+        Guid Id { get; } 
     }
 }

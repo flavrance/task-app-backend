@@ -8,31 +8,30 @@
 
     public sealed class TaskCollection
     {
-        private readonly IList<ITask> _tasks;
+        private readonly IList<Task> _tasks;
 
         public TaskCollection()
         {
-            _tasks = new List<ITask>();
+            _tasks = new List<Task>();
         }
 
-        public IReadOnlyCollection<ITask> GetTasks()
+        public IReadOnlyCollection<Task> GetTasks()
         {
-            IReadOnlyCollection<ITask> tasks = new ReadOnlyCollection<ITask>(_tasks);
+            IReadOnlyCollection<Task> tasks = new ReadOnlyCollection<Task>(_tasks);
             return tasks;
         }
-
-        public ITask GetLastTask()
+        public Task GetLastTask()
         {
-            ITask task = _tasks[_tasks.Count - 1];
+            Task task = _tasks[_tasks.Count - 1];
             return task;
         }
 
-        public void Add(ITask task)
+        public void Add(Task task)
         {
             _tasks.Add(task);
         }
 
-        public void Add(IEnumerable<ITask> tasks)
+        public void Add(IEnumerable<Task> tasks)
         {
             foreach (var task in tasks)
             {

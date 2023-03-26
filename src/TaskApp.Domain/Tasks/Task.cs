@@ -10,44 +10,26 @@
         public Guid Id { get; private set; }
         public Description Description { get; private set; }
         public Date Date { get; private set; }
-        public TaskStatusEnum Status { get; private set; }
-        public IReadOnlyCollection<ITask> GetTasks()
-        {
-            IReadOnlyCollection<ITask> readOnly = _tasks.GetTasks();
-            return readOnly;
-        }
-
-        private TaskCollection _tasks;        
-        
+        public TaskStatusEnum Status { get; private set; }                
+        public Task() { }
         public Task(TaskStatusEnum status)
         {
             Id = Guid.NewGuid();
-            Status = status;
-            _tasks = new TaskCollection();            
-        }       
-        
-
-        public ITask GetLastTask()
+            Status = status;            
+        }
+        public static Task Load(Description description, Date date, TaskStatusEnum status)
         {
-            ITask task = _tasks.GetLastTask();
+            Task task = new Task(status);            
+            task.Description = description;
+            task.Date = date;
             return task;
         }
-
-        public IReadOnlyCollection<ITask> GetTasksByDescription()
-        {
-            IReadOnlyCollection<ITask> readOnly = _tasks.GetTasks();
-            return readOnly;
-        }
-
-        
-
-        public static Task Load(Guid id, Description description, Date date, TaskStatusEnum status, TaskCollection tasks)
+        public static Task Load(Guid id, Description description, Date date, TaskStatusEnum status)
         {
             Task task = new Task(status);
-            task.Id = id;
-            task._tasks = tasks;
+            task.Id = id;            
             task.Description = description;
-            task.Date = date;            
+            task.Date = date;
             return task;
         }
     }

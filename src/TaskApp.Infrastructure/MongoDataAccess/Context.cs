@@ -17,43 +17,17 @@
         }
         
 
-        public IMongoCollection<CashFlow> Tasks
+        public IMongoCollection<Task> Tasks
         {
             get
             {
-                return database.GetCollection<CashFlow>("Tasks");
+                return database.GetCollection<Task>("Tasks");
             }
-        }
-
-        public IMongoCollection<Credit> Credits
-        {
-            get
-            {
-                return database.GetCollection<Credit>("Credits");
-            }
-        }
-
-        public IMongoCollection<Debit> Debits
-        {
-            get
-            {
-                return database.GetCollection<Debit>("Debits");
-            }
-        }
+        }        
 
         private void Map()
         {
-            BsonClassMap.RegisterClassMap<CashFlow>(cm =>
-            {
-                cm.AutoMap();
-            });
-
-            BsonClassMap.RegisterClassMap<Credit>(cm =>
-            {
-                cm.AutoMap();
-            });
-
-            BsonClassMap.RegisterClassMap<Debit>(cm =>
+            BsonClassMap.RegisterClassMap<Task>(cm =>
             {
                 cm.AutoMap();
             });            

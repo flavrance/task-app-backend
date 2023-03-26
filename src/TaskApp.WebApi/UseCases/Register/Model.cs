@@ -6,11 +6,11 @@
 
     internal sealed class Model
     {        
-        public List<CashFlowDetailsModel> Tasks { get; set; }
+        public List<TaskDetailsModel> Tasks { get; set; }
 
-        public Model(List<CashFlowDetailsModel> Tasks)
+        public Model(List<TaskDetailsModel> tasks)
         {            
-            Tasks = Tasks;
+            Tasks = tasks;
         }
     }
 }
