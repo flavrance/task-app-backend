@@ -1,5 +1,5 @@
 {
-	"origin": "https://github.com/flavrance/fluxo-caixa-teste/",
+	"origin": "https://github.com/flavrance/task-app-backend/",
 	"architecture-style": "hexagonal",		
 	"use-cases": "full",
 	"user-interface": "webapi",

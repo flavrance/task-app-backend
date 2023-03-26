@@ -1,16 +1,16 @@
-# Teste Fluxo de Caixa
-Fluxo de Caixa é uma aplicação backend, construído a partir dos princícipios de arquitetura hexagonal, seguindo os principios de [Alistair Cockburn blog post.](http://alistair.cockburn.us/Hexagonal+architecture) e seus domínios criados a partir do DDD.
+# Task App
+Task App é uma aplicação backend, construído a partir dos princícipios de arquitetura hexagonal, seguindo os principios de [Alistair Cockburn blog post.](http://alistair.cockburn.us/Hexagonal+architecture) e seus domínios criados a partir do DDD.
 
 ## Compilando a partid do código
 Para executar a partir do código, clone o repositório para a sua máquina, compilar e testar:
 
 ```sh
-git clone https://github.com/flavrance/fluxo-caixa-teste.git
-cd fluxo-caixa-teste/src/FluxoCaixa.WebApi
+git clone https://github.com/flavrance/task-app-backend.git
+cd task-app-backend/src/TaskApp.WebApi
 dotnet run
 ```
-## The Architecture
-![Arquitetura Hexagonal](https://raw.githubusercontent.com/flavrance/fluxo-caixa-teste/main/docs/hexagonal_style-1.jpg)
+## A Arquitetura
+![Arquitetura Hexagonal](https://raw.githubusercontent.com/flavrance/task-app-backend/main/docs/hexagonal_style-1.jpg)
 Permitir que um aplicativo seja igualmente conduzido por usuários, programas, testes automatizados ou scripts em lote, e que seja desenvolvido e testado isoladamente de seus eventuais dispositivos de tempo de execução e bancos de dados.
 
 À medida que os eventos chegam do mundo externo em uma porta, um adaptador específico de tecnologia os converte em uma chamada de procedimento utilizável e os passa para o aplicativo. O aplicativo é felizmente ignorante da natureza do dispositivo de entrada. Quando o aplicativo tem algo para enviar, ele envia através de uma porta para um adaptador, que cria os sinais apropriados necessários para a tecnologia receptora (humana ou automatizada). O aplicativo tem uma interação semanticamente sólida com os adaptadores em todos os lados, sem realmente conhecer a natureza das coisas do outro lado dos adaptadores.
@@ -28,7 +28,7 @@ Permitir que um aplicativo seja igualmente conduzido por usuários, programas, t
 | .NET Core 2.0 | .NET Core é um detalhe. Quase tudo nesta base de código pode ser portado para outras versões. |
 | CQRS | **[CQRS](https://martinfowler.com/bliki/CQRS.html)** é um acrônimo para *Segregação de responsabilidade de consulta de comando*. Esse padrão permite dividir nosso modelo de negócios conceitual em duas representações. A representação principal reside na Pilha de Comandos, para executar criações, atualizações e exclusões. O modelo de exibição reside dentro da pilha de consulta, onde podemos criar um modelo de consulta que facilite a agregação de informações para exibir aos clientes e à interface do usuário. |
 
-![Arquitetura Hexagonal Adotada](https://raw.githubusercontent.com/flavrance/fluxo-caixa-teste/main/docs/FluxoCaixa.C4.drawio.png)
+![Arquitetura Hexagonal Adotada](https://raw.githubusercontent.com/flavrance/task-app-backend/main/docs/TaskApp.drawio.png)
 
 ## Requisitos
 * [Visual Studio 2017 with Update 3](https://www.visualstudio.com/en-us/news/releasenotes/vs2017-relnotes)
@@ -37,19 +37,19 @@ Permitir que um aplicativo seja igualmente conduzido por usuários, programas, t
 
 ## Setup Pré requisitos 
 
-O único pré-requisito para executar a API da Web é uma string de conexão válida para o MongoDB. Para ajudá-lo a executá-lo sem muito trabalho, siga as etapas na página [configuração de pré-requisitos](https://github.com/flavrance/fluxo-caixa-teste/wiki/Setup-Pré-Requisitos).
+O único pré-requisito para executar a API da Web é uma string de conexão válida para o MongoDB. Para ajudá-lo a executá-lo sem muito trabalho, siga as etapas na página [configuração de pré-requisitos](https://github.com/flavrance/task-app-backend/wiki/Setup-Pré-Requisitos).
 
 ## Executando o Dockerfile
 
 Você pode executar o container Docker  deste projeto com o seguinte comando:
 
 ```sh
-$ cd fluxo-caixa-teste
-$ docker build -t fluxo-caixa
+$ cd task-app-backend
+$ docker build -t task-app
 $ docker run -d -p 8000:80 \
 	-e ConnectionString=mongodb://10.0.75.1:27017 \
-	--name fluxo-caixa \
-	fluxo-caixa:latest
+	--name task-app \
+	task-app:latest
 ```
 Então navegue para http://localhost:8000/swagger e visualize o documento Swagger gerado.
 
