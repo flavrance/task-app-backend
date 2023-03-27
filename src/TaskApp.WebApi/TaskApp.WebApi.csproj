@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\worker\src\TaskApp.WorkerService.Core\TaskApp.WorkerService.Core.csproj" />
     <ProjectReference Include="..\TaskApp.Application\TaskApp.Application.csproj" />
     <ProjectReference Include="..\TaskApp.Infrastructure\TaskApp.Infrastructure.csproj" />
   </ItemGroup>
@@ -47,6 +48,8 @@
 
   <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <OutputType>Exe</OutputType>
+    <StartupObject></StartupObject>
   </PropertyGroup>
 
   <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">

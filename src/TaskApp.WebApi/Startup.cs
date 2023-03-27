@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Http;
 using System.Net.Mime;
 using System;
+using TaskApp.WorkerService.Core.Extensions;
 
 namespace TaskApp.WebApi
 {
@@ -34,7 +35,7 @@ namespace TaskApp.WebApi
                     .AllowAnyHeader());
             });
             services.AddHealthChecks();
-
+            services.AddMassTransitPublisher(Configuration);
             services.AddMvc(options =>
             {
                 options.Filters.Add(typeof(DomainExceptionFilter));

@@ -5,15 +5,18 @@
     using TaskApp.Application.Commands.Register;
     using TaskApp.WebApi.Model;
     using System.Collections.Generic;
+    using MassTransit;
 
     [Route("api/[controller]")]
     public sealed class TasksController : Controller
     {
         private readonly IRegisterUseCase registerService;
+        private readonly IPublishEndpoint _publishEndpoint;
 
-        public TasksController(IRegisterUseCase registerService)
+        public TasksController(IRegisterUseCase registerService, IPublishEndpoint publishEndpoint)
         {
             this.registerService = registerService;
+            this._publishEndpoint = publishEndpoint;
         }
 
         /// <summary>
@@ -22,6 +25,9 @@
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]RegisterRequest request)
         {
+            await _publishEndpoint.Publish(request);
+
+            return Ok();
             RegisterResult result = await registerService.Execute(
                 request.Description, request.Date, (Domain.Tasks.TaskStatusEnum)request.Status);
 
