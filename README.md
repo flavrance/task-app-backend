@@ -18,7 +18,6 @@ Permitir que um aplicativo seja igualmente conduzido por usuários, programas, t
 | Concept | Description |
 | --- | --- |
 | DDD | Os Casos de Uso do Fluxo de Caixa são a Linguagem Ubíqua projetada nas camadas de Domínio e Aplicação, usamos os termos de Eric Evans como Entities, Value Object, Aggregates Root and Bounded Context. |
-<!--| TDD | Desde o início do projeto desenvolvemos Unit Tests que nos ajudaram a impor as regras de negócio e a criar uma aplicação que previne bugs ao invés de encontrá-los. Também temos testes mais sofisticados como Testes de Caso de Uso, Testes de Mapeamento e Testes de Integração. |-->
 | SOLID | Os princípios SOLID estão em toda a solução. O conhecimento do SOLID não é um pré-requisito, mas é altamente recomendado. |
 | Entity-Boundary-Interactor (EBI) | O objetivo da arquitetura EBI é produzir uma implementação de software independente de tecnologia, estrutura ou banco de dados. O resultado é o foco em casos de uso e entrada/saída. |
 | Microservice | Projetamos o software em torno do Domínio de Negócios, tendo Entrega Contínua e Implantação Independente. |
