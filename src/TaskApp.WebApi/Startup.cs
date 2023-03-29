@@ -14,6 +14,7 @@ using System.Net.Mime;
 using System;
 using TaskApp.WorkerService.Core.Extensions;
 using System.Reflection;
+using TaskApp.Infrastructure.Modules;
 
 namespace TaskApp.WebApi
 {
@@ -78,6 +79,8 @@ namespace TaskApp.WebApi
         public void ConfigureContainer(ContainerBuilder builder)
         {
             builder.RegisterModule(new ConfigurationModule(Configuration));
+            builder.RegisterModule(new WebApiModule());
+            builder.RegisterModule(new ApplicationModule());
             //builder.RegisterAssemblyTypes(Assembly.Load("TaskApp.Infrastructure")).AsImplementedInterfaces();
         }
 
