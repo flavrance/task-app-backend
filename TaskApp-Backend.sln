@@ -12,9 +12,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskApp.WebApi", "src\TaskA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Worker", "Worker", "{C4CD0D7D-9F40-41B1-8C00-19AAA6118E95}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskApp.WorkerService.Core", "worker\src\TaskApp.WorkerService.Core\TaskApp.WorkerService.Core.csproj", "{60491391-9B76-422B-9A37-7D62023A0342}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskApp.WorkerService.Core", "worker\TaskApp.WorkerService.Core\TaskApp.WorkerService.Core.csproj", "{60491391-9B76-422B-9A37-7D62023A0342}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskApp.WorkerService", "worker\src\TaskApp.WorkerService\TaskApp.WorkerService.csproj", "{D213A705-B0AB-4665-BF4B-B5B564D71E20}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskApp.WorkerService", "worker\TaskApp.WorkerService\TaskApp.WorkerService.csproj", "{D213A705-B0AB-4665-BF4B-B5B564D71E20}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -29,27 +29,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\worker\src\TaskApp.WorkerService.Core\TaskApp.WorkerService.Core.csproj" />
+    <ProjectReference Include="..\..\worker\TaskApp.WorkerService.Core\TaskApp.WorkerService.Core.csproj" />
     <ProjectReference Include="..\TaskApp.Application\TaskApp.Application.csproj" />
     <ProjectReference Include="..\TaskApp.Infrastructure\TaskApp.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Update="autofac.dapper.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="autofac.entityframework.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+  <ItemGroup>    
     <Content Update="autofac.mongodb.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
   <PropertyGroup>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <OutputType>Exe</OutputType>
-    <StartupObject></StartupObject>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>    
   </PropertyGroup>
 
   <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">

@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using System.Net.Mime;
 using System;
 using TaskApp.WorkerService.Core.Extensions;
+using System.Reflection;
 
 namespace TaskApp.WebApi
 {
@@ -27,6 +28,8 @@ namespace TaskApp.WebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMassTransitPublisher(Configuration);
+            
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
@@ -35,13 +38,21 @@ namespace TaskApp.WebApi
                     .AllowAnyHeader());
             });
             services.AddHealthChecks();
-            services.AddMassTransitPublisher(Configuration);
+            
             services.AddMvc(options =>
             {
                 options.Filters.Add(typeof(DomainExceptionFilter));
                 options.Filters.Add(typeof(ValidateModelAttribute));
-            });
-
+            }).AddControllersAsServices();
+            
+            
+            /*
+            services.AddControllers(options =>
+            {
+                options.Filters.Add(typeof(DomainExceptionFilter));
+                options.Filters.Add(typeof(ValidateModelAttribute));
+            });*/
+            
             services.AddSwaggerGen(options =>
             {
                 options.DescribeAllParametersInCamelCase();
@@ -67,6 +78,7 @@ namespace TaskApp.WebApi
         public void ConfigureContainer(ContainerBuilder builder)
         {
             builder.RegisterModule(new ConfigurationModule(Configuration));
+            //builder.RegisterAssemblyTypes(Assembly.Load("TaskApp.Infrastructure")).AsImplementedInterfaces();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -99,16 +111,22 @@ namespace TaskApp.WebApi
                 });
 
             app.UseCors("CorsPolicy");
-
+            
             app.UseRouting();
+            //app.UseAuthorization();
             app.UseHttpsRedirection();
-            app.UseAuthorization();
+            
+            /*app.UseEndpoints(endpoints =>
+            {
+                endpoints.
+            });                        */
+            
 
             app.UseSwagger()
                .UseSwaggerUI(c =>
                {
                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Tasks API V1");
-               });
+               });            
         }
     }
 }

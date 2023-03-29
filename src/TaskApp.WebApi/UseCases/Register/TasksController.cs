@@ -28,6 +28,7 @@
             await _publishEndpoint.Publish(request);
 
             return Ok();
+            /*
             RegisterResult result = await registerService.Execute(
                 request.Description, request.Date, (Domain.Tasks.TaskStatusEnum)request.Status);
 
@@ -37,7 +38,7 @@
                 result.Task.Date,
                 (int)result.Task.Status);
 
-            return CreatedAtRoute("GetTask", new { taskId = task.TaskId }, task);
+            return CreatedAtRoute("GetTask", new { taskId = task.TaskId }, task);*/
         }
     }
 }

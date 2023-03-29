@@ -44,11 +44,19 @@ Você pode executar o container Docker  deste projeto com o seguinte comando:
 
 ```sh
 $ cd task-app-backend
-$ docker build -t task-app
+$ cd setup
+$ docker compose up
+$ cd ..
+$ docker build -t task-app .
 $ docker run -d -p 8000:80 \
 	-e ConnectionString=mongodb://10.0.75.1:27017 \
 	--name task-app \
 	task-app:latest
+$ docker build -t task-app-worker ./Dockerfile_worker
+$ docker run -d -p 8000:80 \
+	-e ConnectionString=mongodb://10.0.75.1:27017 \
+	--name task-app-worker \
+	task-app:latest	
 ```
 Então navegue para http://localhost:8000/swagger e visualize o documento Swagger gerado.
 

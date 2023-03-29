@@ -1,2 +1,2 @@
 #!/bin/bash
-dotnet build "FluxoCaixa.Infrastructure/FluxoCaixa.Infrastructure.csproj"
+dotnet build "TaskApp.Infrastructure/TaskApp.Infrastructure.csproj"
