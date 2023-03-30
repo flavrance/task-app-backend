@@ -3,34 +3,44 @@ using System.Threading;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using TaskApp.Application.Commands.Register;
+using TaskApp.Application.Repositories;
+using TaskApp.Infrastructure.MongoDataAccess;
+using TaskApp.Infrastructure.MongoDataAccess.Repositories;
 using TaskApp.WorkerService.Core.Extensions;
 using TaskApp.WorkerService.Workers;
 
 try
 {
     var builder = WebApplication.CreateBuilder(args);
-    builder.AddSerilog("Worker MassTransit");
+
+    IConfiguration Configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables()
+    .AddCommandLine(args)
+    .Build();
+
+    //builder.Configuration.SetBasePath(Directory.GetCurrentDirectory());
+
+
     Log.Information("Starting Worker");
 
     var host = Host.CreateDefaultBuilder(args)
         .UseSerilog(Log.Logger)
         .ConfigureServices((context, collection) =>
         {
-            var appSettings = new AppSettings();
-            context.Configuration.Bind(appSettings);
-            collection.AddOpenTelemetry(appSettings);
-            collection.AddHttpContextAccessor();
+            collection.AddSingleton<Context>(new Context(Configuration.GetConnectionString("MongoDb"), Configuration.GetSection("MongoDB").GetValue<string>("DatabaseName")));
+            collection.AddScoped<ITaskWriteOnlyRepository, TaskRepository>();
+            collection.AddScoped<IRegisterUseCase, RegisterUseCase>();
 
             collection.AddMassTransit(x =>
             {
                 x.AddDelayedMessageScheduler();
-                x.AddConsumer<QueueRegisterSaved>(typeof(TimerVideoConsumerDefinition));
-                x.AddConsumer<QueueClientInsertedConsumer>(typeof(QueueClientConsumerDefinition));
-                x.AddConsumer<QueueClientUpdatedConsumer>(typeof(QueueClientUpdatedConsumerDefinition));
-                x.AddConsumer<QueueSendEmailConsumer>(typeof(QueueSendEmailConsumerDefinition));
-                x.AddRequestClient<ConvertVideoEvent>();
+                x.AddConsumer<QueueRegisterSaved>();
+                
 
                 x.SetKebabCaseEndpointNameFormatter();
 
