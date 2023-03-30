@@ -1,62 +1,61 @@
-namespace TaskApp.WorkerService
+using System;
+using System.Threading;
+using MassTransit;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Serilog;
+using TaskApp.WorkerService.Core.Extensions;
+using TaskApp.WorkerService.Workers;
+
+try
 {
-    using MassTransit;
-    using Microsoft.Extensions.Hosting;
-    using TaskApp.WorkerService.Core.Extensions;    
-    using Serilog;
-    using Microsoft.Extensions.Configuration;
-    using TaskApp.WorkerService.Workers;
-    using Microsoft.Extensions.DependencyInjection;
-    using TaskApp.Application.Commands.Register;
+    var builder = WebApplication.CreateBuilder(args);
+    builder.AddSerilog("Worker MassTransit");
+    Log.Information("Starting Worker");
 
-    internal sealed class Program 
-    {
-        public static async Task<int> BuildHost(string[] args)
+    var host = Host.CreateDefaultBuilder(args)
+        .UseSerilog(Log.Logger)
+        .ConfigureServices((context, collection) =>
         {
-            try
-            {
-                Log.Information("Starting host");
+            var appSettings = new AppSettings();
+            context.Configuration.Bind(appSettings);
+            collection.AddOpenTelemetry(appSettings);
+            collection.AddHttpContextAccessor();
 
-                var host = Host.CreateDefaultBuilder(args)
-                    .ConfigureServices((hostContext, services) =>
+            collection.AddMassTransit(x =>
+            {
+                x.AddDelayedMessageScheduler();
+                x.AddConsumer<QueueRegisterSaved>(typeof(TimerVideoConsumerDefinition));
+                x.AddConsumer<QueueClientInsertedConsumer>(typeof(QueueClientConsumerDefinition));
+                x.AddConsumer<QueueClientUpdatedConsumer>(typeof(QueueClientUpdatedConsumerDefinition));
+                x.AddConsumer<QueueSendEmailConsumer>(typeof(QueueSendEmailConsumerDefinition));
+                x.AddRequestClient<ConvertVideoEvent>();
+
+                x.SetKebabCaseEndpointNameFormatter();
+
+                x.UsingRabbitMq((ctx, cfg) =>
+                {
+                    cfg.Host(context.Configuration.GetConnectionString("RabbitMq"));
+                    cfg.UseDelayedMessageScheduler();
+                    //cfg.ConnectReceiveObserver(new ReceiveObserverExtensions());
+                    cfg.ServiceInstance(instance =>
                     {
-                        services.AddTransient<IRegisterUseCase, RegisterUseCase>();
-                        services.AddMassTransit(x =>
-                        {
-                            x.AddConsumer<QueueRegisterSaved>();                            
+                        instance.ConfigureJobServiceEndpoints();
+                        instance.ConfigureEndpoints(ctx, new KebabCaseEndpointNameFormatter("dev", false));
+                    });
+                });
+            });
+        }).Build();
 
-                            x.UsingRabbitMq((context, cfg) =>
-                            {
-                                cfg.Host(hostContext.Configuration.GetConnectionString("RabbitMq"));
-                                cfg.ConfigureEndpoints(context);
-                            });
-                        });
-
-                    })
-                    .UseSerilog()                    
-                    .Build();
-
-                await host.RunAsync();
-
-                return 0;
-            }
-            catch (Exception ex)
-            {
-                Log.Fatal(ex, "Host terminated unexpectedly");
-
-                return 1;
-            }
-            finally
-            {
-                Log.CloseAndFlush();
-            }
-
-        }
-        public static void Main(string[] args)
-        {
-            SerilogExtension.AddSerilog();
-
-            _ = BuildHost(args);
-        }
-    }
+    await host.RunAsync();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Host terminated unexpectedly");
+}
+finally
+{
+    Log.Information("Server Shutting down...");
+    Log.CloseAndFlush();
 }

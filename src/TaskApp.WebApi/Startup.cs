@@ -15,6 +15,13 @@ using System;
 using TaskApp.WorkerService.Core.Extensions;
 using System.Reflection;
 using TaskApp.Infrastructure.Modules;
+using TaskApp.Application.Commands.Register;
+using TaskApp.Application.Commands.Task;
+using TaskApp.Infrastructure.MongoDataAccess.Queries;
+using TaskApp.Application.Queries;
+using TaskApp.Infrastructure.MongoDataAccess;
+using MongoDB.Driver.Core.Configuration;
+using MassTransit;
 
 namespace TaskApp.WebApi
 {
@@ -25,11 +32,11 @@ namespace TaskApp.WebApi
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        public IConfiguration Configuration { get; private set; }
+        public ILifetimeScope AutofacContainer { get; private set; }
 
         public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddMassTransitPublisher(Configuration);
+        {                    
             
             services.AddCors(options =>
             {
@@ -40,19 +47,18 @@ namespace TaskApp.WebApi
             });
             services.AddHealthChecks();
             
-            services.AddMvc(options =>
+            /*services.AddMvc(options =>
             {
                 options.Filters.Add(typeof(DomainExceptionFilter));
                 options.Filters.Add(typeof(ValidateModelAttribute));
             }).AddControllersAsServices();
+            */ 
             
-            
-            /*
             services.AddControllers(options =>
             {
                 options.Filters.Add(typeof(DomainExceptionFilter));
                 options.Filters.Add(typeof(ValidateModelAttribute));
-            });*/
+            });
             
             services.AddSwaggerGen(options =>
             {
@@ -74,6 +80,8 @@ namespace TaskApp.WebApi
 
                 options.CustomSchemaIds(x => x.FullName);
             });
+
+            services.AddMassTransitPublisher(Configuration);            
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -81,11 +89,22 @@ namespace TaskApp.WebApi
             builder.RegisterModule(new ConfigurationModule(Configuration));
             builder.RegisterModule(new WebApiModule());
             builder.RegisterModule(new ApplicationModule());
+            builder.RegisterModule(new InfrastructureModule());
+            builder.RegisterType<RegisterUseCase>().As<IRegisterUseCase>();
+            builder.RegisterType<TaskUseCase>().As<ITaskUseCase>();
+            builder.RegisterType<TaskQueries>().As<ITaskQueries>();
+            builder.RegisterType<Context>()
+                .As<Context>()
+                .WithParameter("connectionString", Configuration.GetConnectionString("MongoDb"))
+                .WithParameter("databaseName", Configuration.GetSection("MongoDB").GetValue<string>("DatabaseName"))
+                .SingleInstance();
             //builder.RegisterAssemblyTypes(Assembly.Load("TaskApp.Infrastructure")).AsImplementedInterfaces();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -119,10 +138,10 @@ namespace TaskApp.WebApi
             //app.UseAuthorization();
             app.UseHttpsRedirection();
             
-            /*app.UseEndpoints(endpoints =>
+            app.UseEndpoints(endpoints =>
             {
-                endpoints.
-            });                        */
+                endpoints.MapControllers();
+            });          
             
 
             app.UseSwagger()

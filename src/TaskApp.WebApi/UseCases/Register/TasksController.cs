@@ -25,7 +25,7 @@
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]RegisterRequest request)
         {
-            await _publishEndpoint.Publish(request);
+            await _publishEndpoint.Publish<RegisterRequest>(request);
 
             return Ok();
             /*

@@ -1,8 +1,10 @@
-﻿namespace TaskApp.Infrastructure.MongoDataAccess
+﻿using TaskApp.Infrastructure.MongoDataAccess;
+
+namespace TaskApp.Infrastructure.Modules
 {
     using Autofac;
 
-    public class Module : Autofac.Module
+    public class InfrastructureModule : Autofac.Module
     {
         public string ConnectionString { get; set; }
         public string DatabaseName { get; set; }

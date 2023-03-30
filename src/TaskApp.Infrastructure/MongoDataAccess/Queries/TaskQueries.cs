@@ -10,6 +10,7 @@
     using System.Linq;
     using System.Security.Cryptography;
     using TaskApp.Domain.Tasks;
+    using MongoDB.Bson;
 
     public class TaskQueries : ITaskQueries
     {
@@ -42,7 +43,7 @@
         public async Task<TaskCollectionResult> GetTasks()
         {
             IList<Entities.Task> data = await context
-            .Tasks.Find(_ => true)
+            .Tasks.Find(new BsonDocument())
             .ToListAsync();
 
             TaskCollectionResult result = new TaskCollectionResult();

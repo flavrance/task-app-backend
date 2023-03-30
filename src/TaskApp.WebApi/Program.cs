@@ -41,7 +41,7 @@
                             preserveStaticLogger: false,
                             writeToProviders: true
                         )
-                        .ConfigureServices(services => services.AddAutofac())
+                        //.ConfigureServices(services => services.AddAutofac())
                         .Build();
         }
     }
