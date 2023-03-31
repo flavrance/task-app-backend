@@ -81,7 +81,7 @@ namespace TaskApp.WebApi
                 options.CustomSchemaIds(x => x.FullName);
             });
 
-            services.AddMassTransitPublisher(Configuration);            
+            services.AddMassTransitExtension(Configuration);            
         }
 
         public void ConfigureContainer(ContainerBuilder builder)

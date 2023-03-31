@@ -6,6 +6,7 @@
     using TaskApp.WebApi.Model;
     using System.Collections.Generic;
     using MassTransit;
+    using TaskApp.WorkerService.Core.Events;
 
     [Route("api/[controller]")]
     public sealed class TasksController : Controller
@@ -25,7 +26,9 @@
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]RegisterRequest request)
         {
-            await _publishEndpoint.Publish<RegisterRequest>(request);
+            await _publishEndpoint.Publish<RegisterSavedEvent>(new RegisterSavedEvent{ Date = request.Date, 
+             Description = request.Description, 
+            Status = request.Status});
 
             return Ok();
             /*

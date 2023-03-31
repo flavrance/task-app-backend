@@ -1,46 +1,41 @@
-using System;
-using System.Threading;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Serilog;
-using TaskApp.Application.Commands.Register;
-using TaskApp.Application.Repositories;
-using TaskApp.Infrastructure.MongoDataAccess;
-using TaskApp.Infrastructure.MongoDataAccess.Repositories;
+using TaskApp.WorkerService.Core;
+using TaskApp.WorkerService.Core.Events;
 using TaskApp.WorkerService.Core.Extensions;
 using TaskApp.WorkerService.Workers;
+using Serilog;
+using TaskApp.Application.Commands.Register;
+using TaskApp.Infrastructure.MongoDataAccess;
+using TaskApp.Infrastructure.MongoDataAccess.Repositories;
+using TaskApp.Application.Repositories;
 
 try
 {
     var builder = WebApplication.CreateBuilder(args);
-
-    IConfiguration Configuration = new ConfigurationBuilder()
-    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-    .AddEnvironmentVariables()
-    .AddCommandLine(args)
-    .Build();
-
-    //builder.Configuration.SetBasePath(Directory.GetCurrentDirectory());
-
-
+    builder.AddSerilog("TaskApp Worker");
     Log.Information("Starting Worker");
 
     var host = Host.CreateDefaultBuilder(args)
         .UseSerilog(Log.Logger)
         .ConfigureServices((context, collection) =>
         {
-            collection.AddSingleton<Context>(new Context(Configuration.GetConnectionString("MongoDb"), Configuration.GetSection("MongoDB").GetValue<string>("DatabaseName")));
+            var appSettings = new AppSettings();
+            context.Configuration.Bind(appSettings);
+            collection.AddOpenTelemetry(appSettings);
+            collection.AddHttpContextAccessor();
+            collection.AddSingleton<Context>(mongoContext => new Context(context.Configuration.GetConnectionString("MongoDb"),
+                context.Configuration.GetSection("MongoDB").GetValue<string>("DatabaseName")));
             collection.AddScoped<ITaskWriteOnlyRepository, TaskRepository>();
             collection.AddScoped<IRegisterUseCase, RegisterUseCase>();
+            
+
+
 
             collection.AddMassTransit(x =>
             {
-                x.AddDelayedMessageScheduler();
-                x.AddConsumer<QueueRegisterSaved>();
-                
+                x.AddDelayedMessageScheduler();                
+                x.AddConsumer<QueueRegisterSavedConsumer>(typeof(QueueRegisterConsumerDefinition));                
 
                 x.SetKebabCaseEndpointNameFormatter();
 

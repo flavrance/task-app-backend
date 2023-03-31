@@ -45,20 +45,23 @@ Você pode executar o container Docker  deste projeto com o seguinte comando:
 ```sh
 $ cd task-app-backend
 $ cd setup
-$ docker compose up
+$ docker compose create
+$ docker compose run -p
 $ cd ..
 $ docker build -t task-app .
 $ docker run -d -p 8000:80 \
 	-e ConnectionString=mongodb://10.0.75.1:27017 \
 	--name task-app \
 	task-app:latest
-$ docker build -t task-app-worker ./Dockerfile_worker
-$ docker run -d -p 8000:80 \
-	-e ConnectionString=mongodb://10.0.75.1:27017 \
-	--name task-app-worker \
-	task-app:latest	
+$ docker build -t task-app-worker -f ./worker/Dockerfile .
+$ docker run -d --name task-app-worker  task-app-worker:latest			
 ```
 Então navegue para http://localhost:8000/swagger e visualize o documento Swagger gerado.
+Para que cada container (docker) de aplicação (API e Worker) consiga acessar os container's (MongoDb e RabbitMq) precisam ter acesso externo aos respectivos IP's e portas.
+para descobrir o IP
+```sh
+$ docker container inspect <docker-container-id> | grep -i IPAddress
+```
 
 ## Verificando o HealthCheck
 
