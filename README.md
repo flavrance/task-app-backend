@@ -45,8 +45,7 @@ Você pode executar o container Docker  deste projeto com o seguinte comando:
 ```sh
 $ cd task-app-backend
 $ cd setup
-$ docker compose create
-$ docker compose run -p
+$ docker compose up -d
 $ cd ..
 $ docker build -t task-app .
 $ docker run -d -p 8000:80 \

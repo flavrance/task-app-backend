@@ -6,6 +6,7 @@
     using TaskApp.Application.Queries;
     using TaskApp.WebApi.Model;
     using System.Collections.Generic;
+    using TaskApp.Application.Results;
 
     [Route("api/[controller]")]
     public sealed class TasksController : Controller
@@ -22,9 +23,14 @@
         /// Get tasks
         /// </summary>
         [HttpGet(Name = "GetTasks")]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery] string description)
         {
-            var taskCollection = await TasksQueries.GetTasks();
+            TaskCollectionResult taskCollection = null;
+            if(String.IsNullOrEmpty(description) && String.IsNullOrWhiteSpace(description))            
+                taskCollection = await TasksQueries.GetTasks();
+            else if(!String.IsNullOrEmpty(description) && !String.IsNullOrWhiteSpace(description))
+                taskCollection = await TasksQueries.GetTasksByDescription(description);
+
             IList<TaskDetailsModel> result = new List<TaskDetailsModel>();
             foreach(var task in taskCollection.GetTasks()) {
 
@@ -37,28 +43,6 @@
             }
             
             return new ObjectResult(result);
-        }
-
-        /// <summary>
-        /// Get tasks by description
-        /// </summary>
-        [HttpGet("{description}", Name = "GetTasksByDescription")]
-        public async Task<IActionResult> Get(string desription)
-        {
-            var taskCollection = await TasksQueries.GetTasksByDescription(desription);
-            IList<TaskDetailsModel> result = new List<TaskDetailsModel>();
-            foreach (var task in taskCollection.GetTasks())
-            {
-
-                result.Add(new TaskDetailsModel(
-                task.TaskId,
-                task.Description,
-                task.Date,
-                (int)task.Status));
-
-            }
-
-            return new ObjectResult(result);
-        }
+        }        
     }
 }

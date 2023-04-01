@@ -7,8 +7,16 @@ services:
       RABBITMQ_DEFAULT_USER: "admin"
       RABBITMQ_DEFAULT_PASS: "admin"
     ports:
-      - "15672:15672"
-      - "5672:5672"
+      #- "15672:15672"
+      #- "5672:5672"
+      - target: 15672
+        host_ip: 127.0.0.1
+        published: 15672        
+        mode: host
+      - target: 5672
+        host_ip: 127.0.0.1
+        published: 5672        
+        mode: host  
     container_name: "rabbit"
     volumes:
       - "./rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins"
@@ -25,7 +33,11 @@ services:
     volumes:
       - ./mongodb/data/db:/data/db
     ports:
-      - 27017:27017
+      #- 27017:27017
+      - target: 27017
+        host_ip: 127.0.0.1
+        published: 27017
+        mode: host 
     command: mongod --logpath=/dev/null # --quiet
   mongo-express:
     image: mongo-express

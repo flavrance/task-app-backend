@@ -111,9 +111,12 @@
                 Date = task.Date,
                 Status = (int)task.Status
             };
-            var filter = Builders<Entities.Task>.Filter.Eq(c => c.Id == task.Id, true);
+            var filter = Builders<Entities.Task>.Filter.Eq("Id", taskEntity.Id);
+            var update = Builders<Entities.Task>.Update.Set("Description", taskEntity.Description)
+                .Set("Date", taskEntity.Date)
+                .Set("Status", taskEntity.Status);
 
-            await _context.Tasks.UpdateOneAsync(filter, new ObjectUpdateDefinition<Entities.Task>(taskEntity));
+            await _context.Tasks.UpdateOneAsync(filter, update);
         }        
     }
 }
