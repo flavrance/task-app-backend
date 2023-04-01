@@ -7,10 +7,10 @@
     {
         public Guid TaskId { get; }
         public string Description { get; }
-        public DateTime Date { get; }
+        public string Date { get; }
         public int Status { get; }        
 
-        public TaskDetailsModel(Guid taskId, string description, DateTime date, int status)
+        public TaskDetailsModel(Guid taskId, string description, string date, int status)
         {
             TaskId = taskId;
             Description = description;

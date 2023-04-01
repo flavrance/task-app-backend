@@ -47,13 +47,13 @@ $ cd task-app-backend
 $ cd setup
 $ docker compose up -d
 $ cd ..
+$ docker build -t task-app-worker -f ./worker/Dockerfile .
+$ docker run -d --name task-app-worker  task-app-worker:latest	
 $ docker build -t task-app .
 $ docker run -d -p 8000:80 \
 	-e ConnectionString=mongodb://10.0.75.1:27017 \
 	--name task-app \
-	task-app:latest
-$ docker build -t task-app-worker -f ./worker/Dockerfile .
-$ docker run -d --name task-app-worker  task-app-worker:latest			
+	task-app:latest		
 ```
 Então navegue para http://localhost:8000/swagger e visualize o documento Swagger gerado.
 Para que cada container (docker) de aplicação (API e Worker) consiga acessar os container's (MongoDb e RabbitMq) precisam ter acesso externo aos respectivos IP's e portas.

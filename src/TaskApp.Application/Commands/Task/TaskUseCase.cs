@@ -38,6 +38,8 @@
             if (task == null)
                 throw new TaskNotFoundException($"The task {taskId} does not exists.");
 
+            task = Domain.Tasks.Task.Load(task.Id, description, date, status);            
+
             await taskWriteOnlyRepository.Update(task);
             TaskResult result = new TaskResult(task);
             return result;

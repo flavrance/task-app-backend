@@ -37,7 +37,7 @@
                 result.Add(new TaskDetailsModel(
                 task.TaskId,
                 task.Description,
-                task.Date,
+                task.Date.ToString("yyyy-MM-dd"),
                 (int)task.Status));
 
             }
