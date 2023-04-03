@@ -16,6 +16,12 @@ try
     builder.AddSerilog("TaskApp Worker");
     Log.Information("Starting Worker");
 
+    var configurationBuilder = new ConfigurationBuilder()
+               .SetBasePath(Directory.GetCurrentDirectory())
+               .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+               .AddEnvironmentVariables()
+               .Build();
+
     var host = Host.CreateDefaultBuilder(args)
         .UseSerilog(Log.Logger)
         .ConfigureServices((context, collection) =>

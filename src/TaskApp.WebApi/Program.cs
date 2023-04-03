@@ -27,6 +27,7 @@
                     webbuilder.UseStartup<Startup>();
                     webbuilder.ConfigureAppConfiguration((builderContext, config) =>
                     {
+                        config.SetBasePath(Directory.GetCurrentDirectory());
                         IWebHostEnvironment env = (IWebHostEnvironment)builderContext.HostingEnvironment;
                         config.AddJsonFile("autofac.json");
                         config.AddEnvironmentVariables();

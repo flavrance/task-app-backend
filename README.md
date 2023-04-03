@@ -36,28 +36,67 @@ Permitir que um aplicativo seja igualmente conduzido por usuários, programas, t
 
 ## Setup Pré requisitos 
 
-O único pré-requisito para executar a API da Web é uma string de conexão válida para o MongoDB. Para ajudá-lo a executá-lo sem muito trabalho, siga as etapas na página [configuração de pré-requisitos](https://github.com/flavrance/task-app-backend/wiki/Setup-Pré-Requisitos).
+O único pré-requisito para executar a API da Web é uma string de conexão válida para o MongoDB e RabbitMq. Para ajudá-lo a executá-lo sem muito trabalho, siga as etapas na página [configuração de pré-requisitos](https://github.com/flavrance/task-app-backend/wiki/Setup-Pré-Requisitos).
+Verifique qual a versão sdk instalada em sua máquina.
+```sh
+$ dotnet --lists-sdk
+```
+Atualize com a versão 6 e adicione no arquivo global.json na raiz do projeto.
+## Executando os projetos
+Docker compose (setup)
+```sh
+$ cd task-app-backend
+$ cd setup
+$ docker compose up -d
+```
+Worker
+```sh
+# Restore as distinct layers
+dotnet restore TaskApp-Backend.sln
+# Run 
+dotnet run ./out/worker/build/TaskApp.WorkerService.dll
+```
+TaskApp API
+```sh
+# Restore as distinct layers
+dotnet restore TaskApp-Backend.sln
+# Run 
+dotnet run --project ./src/TaskApp.WebApi/TaskApp.WebApi.csproj --urls=http://localhost:8000
+```
 
+<!--
 ## Executando o Dockerfile
 
 Você pode executar o container Docker  deste projeto com o seguinte comando:
+Verificar os Ip's do rabbitmq e mongodb para substituir nos arquivos appsettings.json respectivos de cada aplicação.
 
 ```sh
 $ cd task-app-backend
 $ cd setup
 $ docker compose up -d
 $ cd ..
+$ docker container inspect <docker-container-id-rabbit> | grep -i IPAddress
+$ docker container inspect <docker-container-id-mongo> | grep -i IPAddress
 $ docker build -t task-app-worker -f ./worker/Dockerfile .
 $ docker run -d --name task-app-worker  task-app-worker:latest	
 $ docker build -t task-app .
-$ docker run -d -p 8000:80 \
-	-e ConnectionString=mongodb://10.0.75.1:27017 \
-	--name task-app \
-	task-app:latest		
+$ docker run -d -p 8000:80 --name task-app task-app:latest		
 ```
+```sh
+# Restore as distinct layers
+$ dotnet restore TaskApp-Backend.sln
+# Build a release
+$ dotnet build TaskApp-Backend.sln -c Release -o ../out/build
+
+# Publish a release
+$ dotnet publish TaskApp-Backend.sln -c Release -o ../out/publish
+
+$ dotnet ../out/publish/TaskApp.WorkerService.dll
+```
+-->
 Então navegue para http://localhost:8000/swagger e visualize o documento Swagger gerado.
 Para que cada container (docker) de aplicação (API e Worker) consiga acessar os container's (MongoDb e RabbitMq) precisam ter acesso externo aos respectivos IP's e portas.
-para descobrir o IP
+para descobrir o IP e estarem dentro da mesma rede (network).
 ```sh
 $ docker container inspect <docker-container-id> | grep -i IPAddress
 ```
