@@ -49,20 +49,10 @@ $ cd task-app-backend
 $ cd setup
 $ docker compose up -d
 ```
-Worker
-```sh
-# Restore as distinct layers
-dotnet restore TaskApp-Backend.sln
-# Run 
-dotnet run ./out/worker/build/TaskApp.WorkerService.dll
-```
-TaskApp API
-```sh
-# Restore as distinct layers
-dotnet restore TaskApp-Backend.sln
-# Run 
-dotnet run --project ./src/TaskApp.WebApi/TaskApp.WebApi.csproj --urls=http://localhost:8000
-```
+Worker e TaskApp API
+1. Abra a solução TaskApp-Backend.sln
+2. Execute em modo de depuração (debugging) o projeto TaskApp.WorkerService.csproj
+3. Execute em modo de depuração (debugging) o projeto TaskApp.WebApi.csproj
 
 <!--
 ## Executando o Dockerfile
