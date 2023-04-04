@@ -51,8 +51,7 @@ $ docker compose up -d
 ```
 Worker e TaskApp API
 1. Abra a solução TaskApp-Backend.sln
-2. Execute em modo de depuração (debugging) o projeto TaskApp.WorkerService.csproj
-3. Execute em modo de depuração (debugging) o projeto TaskApp.WebApi.csproj
+2. Configure o modo de depuração (debugging) para inicializar ambos os projetos: TaskApp.WorkerService.csproj e projeto TaskApp.WebApi.csproj
 
 <!--
 ## Executando o Dockerfile
