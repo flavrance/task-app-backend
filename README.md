@@ -24,14 +24,14 @@ Permitir que um aplicativo seja igualmente conduzido por usuários, programas, t
 | Logging |Logging é um detalhe. Conectamos o Serilog e o configuramos para redirecionar todas as mensagens de log para o sistema de arquivos. |
 | Docker | Docker é um detalhe. Ele foi implementado para nos ajudar a fazer uma implantação mais rápida e confiável. |
 | MongoDB | MongoDB é um detalhe. É possível criar uma nova implementação de acesso a dados e configurá-la com o Autofac. |
-| .NET Core 2.0 | .NET Core é um detalhe. Quase tudo nesta base de código pode ser portado para outras versões. |
+| .NET Core 6.0 | .NET Core é um detalhe. Quase tudo nesta base de código pode ser portado para outras versões. |
 | CQRS | **[CQRS](https://martinfowler.com/bliki/CQRS.html)** é um acrônimo para *Segregação de responsabilidade de consulta de comando*. Esse padrão permite dividir nosso modelo de negócios conceitual em duas representações. A representação principal reside na Pilha de Comandos, para executar criações, atualizações e exclusões. O modelo de exibição reside dentro da pilha de consulta, onde podemos criar um modelo de consulta que facilite a agregação de informações para exibir aos clientes e à interface do usuário. |
 
 ![Arquitetura Hexagonal Adotada](https://raw.githubusercontent.com/flavrance/task-app-backend/main/docs/TaskApp.drawio.png)
 
 ## Requisitos
 * [Visual Studio 2017 with Update 3](https://www.visualstudio.com/en-us/news/releasenotes/vs2017-relnotes)
-* [.NET SDK 2.0 ou superior](https://www.microsoft.com/net/download/core)
+* [.NET SDK 6.0 ou superior](https://www.microsoft.com/net/download/core)
 * [Docker](https://docs.docker.com/docker-for-windows/install/)
 
 ## Setup Pré requisitos 
