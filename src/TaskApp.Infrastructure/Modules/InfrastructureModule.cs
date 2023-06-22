@@ -20,8 +20,17 @@ namespace TaskApp.Infrastructure.Modules
             //
             // Register all Types in MongoDataAccess namespace
             //
+
+            //builder.RegisterAssemblyTypes(typeof(InfrastructureException).Assembly)
+            //    .Where(type => type.Namespace.Contains("MongoDataAccess"))
+            //    .AsImplementedInterfaces()
+            //    .InstancePerLifetimeScope();
+
+            //
+            // Register all Types in MongoDataAccess namespace
+            //
             builder.RegisterAssemblyTypes(typeof(InfrastructureException).Assembly)
-                .Where(type => type.Namespace.Contains("MongoDataAccess"))
+                .Where(type => type.Namespace.Contains("DapperDataAccess"))
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
         }
