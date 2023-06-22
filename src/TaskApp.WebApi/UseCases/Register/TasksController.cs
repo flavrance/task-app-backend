@@ -26,22 +26,21 @@
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]RegisterRequest request)
         {
-            await _publishEndpoint.Publish<RegisterSavedEvent>(new RegisterSavedEvent{ Date = request.Date, 
-             Description = request.Description, 
-            Status = request.Status});
-
-            return Ok();
-            /*
+            //await _publishEndpoint.Publish<RegisterSavedEvent>(new RegisterSavedEvent{ Date = request.Date, 
+            // Description = request.Description, 
+            //Status = request.Status});
+            //return Ok();
+            
             RegisterResult result = await registerService.Execute(
                 request.Description, request.Date, (Domain.Tasks.TaskStatusEnum)request.Status);
 
             TaskDetailsModel task = new TaskDetailsModel(
                 result.Task.TaskId,
                 result.Task.Description,
-                result.Task.Date,
+                result.Task.Date.ToString("yyyy-MM-dd"),
                 (int)result.Task.Status);
 
-            return CreatedAtRoute("GetTask", new { taskId = task.TaskId }, task);*/
+            return CreatedAtRoute("GetTask", new { taskId = task.TaskId }, task);
         }
     }
 }
